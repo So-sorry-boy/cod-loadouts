@@ -560,7 +560,8 @@ function renderSelection() {
   if (selectedGun) {
     searchBtn.innerHTML = `<span style="font-size:1.1em;font-weight:600;color:#fff;">${selectedGun.name}</span>`;
   } else {
-    searchBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="white" stroke-width="2"/><path d="M20 20L16.65 16.65" stroke="white" stroke-width="2" stroke-linec[...]
+    // FIX: SVG code was cut off in your code, restore it fully here:
+    searchBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="white" stroke-width="2"/><path d="M20 20L16.65 16.65" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>`;
   }
   // Optionally: show/hide loadouts for selectedGun.id here
   // If selectedGun is set, update the loadouts section
