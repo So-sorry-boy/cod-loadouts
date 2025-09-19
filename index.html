@@ -28,12 +28,15 @@
       color: black;
       border: 1px solid #d1d5db;
       border-radius: 8px;
-      padding: 8px;
+      padding: 16px; /* Increased from 8px to 16px for bigger size */
+      font-size: 1.25rem; /* Increased font size */
+      min-height: 3.5em; /* Make select box taller */
     }
     #gunSelect option, #submitGun option {
       color: black;
       padding: 10px;
       border-bottom: 1px solid #e5e7eb;
+      font-size: 1rem;
     }
     #gunSelect option:hover, #gunSelect option:checked, #gunSelect option:focus,
     #submitGun option:hover, #submitGun option:checked, #submitGun option:focus {
@@ -46,7 +49,7 @@
 
     /* Glitch-free animated search box */
     .search-box {
-      font-size: 20px;
+      font-size: 24px; /* Increased from 20px to 24px */
       display: inline-block;
       position: relative;
       border-radius: 2.5em;
@@ -55,15 +58,16 @@
     .search-box-input {
       font-family: Raleway, sans-serif;
       font-weight: bold;
-      width: 2.5em;
-      height: 2.5em;
-      padding: 0.3em 2.1em 0.3em 0.4em;
+      width: 3.5em; /* Increased from 2.5em to 3.5em */
+      height: 3.5em; /* Increased from 2.5em to 3.5em */
+      padding: 0.6em 2.5em 0.6em 0.8em; /* Increased padding */
       border: none;
       box-sizing: border-box;
       border-radius: 2.5em;
       transition: width 800ms cubic-bezier(0.68, -0.55, 0.27, 1.55);
       background: rgba(255,255,255,0.05);
       color: #fff;
+      font-size: 1.25rem;
     }
     .search-box-input:focus {
       outline: none;
@@ -72,8 +76,8 @@
     }
     .search-box-reset {
       background-color: transparent;
-      width: 1.4em;
-      height: 1.4em;
+      width: 1.8em;
+      height: 1.8em;
       border: 0;
       padding: 0;
       display: flex;
@@ -83,7 +87,7 @@
       top: 0.55em;
       right: 0.55em;
       cursor: pointer;
-      font-size: 1.1em;
+      font-size: 1.25em;
     }
   </style>
   <link rel="stylesheet" href="search-box.css">
@@ -109,37 +113,40 @@
 
 <main class="p-6 max-w-6xl mx-auto">
   <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-    <div class="glass p-4 rounded-xl">
+    <div class="glass p-4 rounded-xl col-span-1 md:col-span-3">
       <label class="text-xs text-slate-300">Pick weapon</label>
 
       <!-- Search input -->
-    <form class="search-box">
-  <input type="text" placeholder=" " id="gunSearch" />
-  <button type="reset"></button>
-    </form>
+      <form class="search-box mt-2">
+        <input type="text" placeholder=" " id="gunSearch" class="search-box-input"/>
+        <button type="reset" class="search-box-reset"></button>
+      </form>
       <!-- Select -->
-      <div class="mt-2">
-        <select id="gunSelect" class="w-full rounded p-2"></select>
+      <div class="mt-4">
+        <select id="gunSelect" class="w-full rounded"></select>
       </div>
 
       <p id="gun-desc" class="mt-2 text-xs text-slate-400"></p>
-    </div>
-
-    <div class="glass p-4 rounded-xl">
-      <label class="text-xs text-slate-300">Quick tips</label>
-      <div class="mt-3 text-sm">
-        <ul class="list-disc ml-4 text-slate-300">
-          <li>Use <strong>Submit loadout</strong> to add your build (saved in your browser).</li>
-          <li>Ratings & comments are stored locally in your browser in this demo.</li>
-          <li>To make comments public, you can later connect Firebase.</li>
-        </ul>
-      </div>
     </div>
   </section>
 
   <section id="loadoutsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-5"></section>
   <div id="empty" class="mt-10 text-center text-slate-400">Select a weapon to see loadouts.</div>
 </main>
+
+<!-- Quick tips moved to the bottom -->
+<section class="max-w-6xl mx-auto px-6 mb-8">
+  <div class="glass p-4 rounded-xl mt-6">
+    <label class="text-xs text-slate-300">Quick tips</label>
+    <div class="mt-3 text-sm">
+      <ul class="list-disc ml-4 text-slate-300">
+        <li>Use <strong>Submit loadout</strong> to add your build (saved in your browser).</li>
+        <li>Ratings & comments are stored locally in your browser in this demo.</li>
+        <li>To make comments public, you can later connect Firebase.</li>
+      </ul>
+    </div>
+  </div>
+</section>
 
 <!-- Submit modal -->
 <div id="submitModal" class="fixed inset-0 z-40 hidden items-center justify-center p-4">
@@ -215,8 +222,53 @@ const GUNS = [
   { id: "agr556", name: "AGR-556" },
   { id: "arctic50", name: "Arctic .50" },
   { id: "by15", name: "BY15" },
-  { id: "chicom", name: "Chicom" }
+  { id: "chicom", name: "Chicom" },
+  { id: "chopper", name: "Chopper" },
+  { id: "cordite", name: "Cordite" },
+  { id: "cbr4", name: "CBR4" },
+  { id: "crossbow", name: "Crossbow" },
+  { id: "dlq33", name: "DL Q33" },
+  { id: "echo", name: "Echo Shotgun" },
+  { id: "fennec", name: "Fennec" },
+  { id: "gks", name: "GKS" },
+  { id: "hg40", name: "HG 40" },
+  { id: "holger26", name: "Holger 26" },
+  { id: "hades", name: "Hades" },
+  { id: "hs0405", name: "HS0405" },
+  { id: "hs2126", name: "HS2126" },
+  { id: "j358", name: "J358" },
+  { id: "kilobolt", name: "Kilo Bolt-Action" },
+  { id: "krm262", name: "KRM-262" },
+  { id: "locus", name: "Locus" },
+  { id: "m21ebr", name: "M21 EBR" },
+  { id: "m4lmg", name: "M4LMG" },
+  { id: "mk2", name: "MK2" },
+  { id: "msmc", name: "MSMC" },
+  { id: "mw11", name: "MW11" },
+  { id: "mx9", name: "MX9" },
+  { id: "na45", name: "NA-45" },
+  { id: "outlaw", name: "Outlaw" },
+  { id: "pdw57", name: "PDW-57" },
+  { id: "pharo", name: "Pharo" },
+  { id: "pp19bizon", name: "PP19 Bizon" },
+  { id: "qxr", name: "QXR" },
+  { id: "qq9", name: "QQ9" },
+  { id: "r90", name: "R9-0" },
+  { id: "razorback", name: "Razorback" },
+  { id: "renetti", name: "Renetti" },
+  { id: "rpd", name: "RPD" },
+  { id: "rus79u", name: "RUS-79U" },
+  { id: "rytecamr", name: "Rytec AMR" },
+  { id: "s36", name: "S36" },
+  { id: "shorty", name: "Shorty" },
+  { id: "sks", name: "SKS" },
+  { id: "spr208", name: "SP-R 208" },
+  { id: "striker", name: "Striker" },
+  { id: "svd", name: "SVD" },
+  { id: "ul736", name: "UL736" },
+  { id: "xpr50", name: "XPR-50" }
 ];
+
 
 const gunSelect = document.getElementById('gunSelect');
 const submitGun = document.getElementById('submitGun');
