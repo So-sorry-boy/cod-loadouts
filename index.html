@@ -19,6 +19,28 @@
     .fade-in { animation: fadeIn .35s ease both; }
     @keyframes fadeIn { from {opacity:0; transform: translateY(6px)} to {opacity:1; transform:none} }
   </style>
+  <style>
+  /* Normal state of select box */
+  #gunSelect {
+    background-color: white;
+    color: black;
+  }
+
+  /* Options text color */
+  #gunSelect option {
+    background-color: white;
+    color: black;
+  }
+
+  /* Hover and selected styles */
+  #gunSelect option:hover,
+  #gunSelect option:checked,
+  #gunSelect option:focus {
+    background-color: #b8860b; /* dark gold */
+    color: white;
+  }
+</style>
+
 </head>
 <body class="text-slate-100 min-h-screen antialiased">
 
