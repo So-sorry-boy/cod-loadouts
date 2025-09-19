@@ -10,97 +10,130 @@
       background: radial-gradient(1200px 600px at 10% 10%, #071026 0%, #05060a 35%, #020203 100%);
     }
     .glass { backdrop-filter: blur(6px); background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.04); }
-    .card-hover:hover { transform: translateY(-6px) scale(1.01); transition: transform .25s ease; box-shadow: 0 10px 30px rgba(0,0,0,0.6); }
     .fade-in { animation: fadeIn .35s ease both; }
     @keyframes fadeIn { from {opacity:0; transform: translateY(6px)} to {opacity:1; transform:none} }
 
-    #gunSelect, #submitGun {
-      text-align: center;
-      text-align-last: center;
-      background-color: white;
-      color: black;
-      border: 1px solid #d1d5db;
-      border-radius: 8px;
-      padding: 16px;
-      font-size: 1.25rem;
-      min-height: 3.5em;
-    }
-    #gunSelect option, #submitGun option {
-      color: black;
-      padding: 10px;
-      border-bottom: 1px solid #e5e7eb;
-      font-size: 1rem;
-    }
-    #gunSelect option:last-child, #submitGun option:last-child {
-      border-bottom: none;
-    }
-
-    /* Animated search box */
-    .search-box {
-      font-size: 24px;
-      display: inline-block;
-      position: relative;
-      border-radius: 2.5em;
-      width: 100%;
-      background: transparent;
-    }
-    .search-box-input {
-      font-family: Raleway, sans-serif;
-      font-weight: bold;
-      width: 3.5em;
-      height: 3.5em;
-      padding: 0.6em 2.5em 0.6em 0.8em;
-      border: none;
-      box-sizing: border-box;
-      border-radius: 2.5em;
-      transition: width 800ms cubic-bezier(0.68, -0.55, 0.27, 1.55), background 0.3s;
-      background: rgba(255,255,255,0.05);
-      color: #fff;
-      font-size: 1.25rem;
-    }
-    .search-box-input:focus {
-      outline: none;
-      width: 100%;
-      background: rgba(255,255,255,0.08);
-    }
-    .search-box-label {
-      position: absolute;
-      left: 1em;
-      top: 50%;
-      transform: translateY(-50%);
-      color: #cbd5e1;
-      pointer-events: none;
-      font-size: 1.15rem;
-      transition: all 0.3s cubic-bezier(.4,0,.2,1);
-      opacity: 1;
-    }
-    .search-box-input:focus + .search-box-label,
-    .search-box-input:not(:placeholder-shown) + .search-box-label {
-      top: 0.4em;
-      left: 1.2em;
-      font-size: 0.85em;
-      opacity: 0.8;
-    }
-    .search-box-reset {
-      background-color: transparent;
-      width: 1.8em;
-      height: 1.8em;
-      border: 0;
-      padding: 0;
+    /* Custom animated search */
+    .circle-search-container {
       display: flex;
       justify-content: center;
       align-items: center;
-      position: absolute;
-      top: 0.55em;
-      right: 0.55em;
-      cursor: pointer;
-      font-size: 1.25em;
-      color: #fff;
-      opacity: 0.7;
-      transition: opacity 0.2s;
+      min-height: 5em;
+      position: relative;
+      margin-bottom: 2.5em;
     }
-    .search-box-reset:hover {
-      opacity: 1;
+    .circle-search-btn {
+      width: 3.5em;
+      height: 3.5em;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #22d3ee 20%, #6366f1 100%);
+      box-shadow: 0 4px 24px rgba(51,65,85,.22);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      border: none;
+      position: relative;
+      z-index: 10;
+      transition: box-shadow .2s;
+    }
+    .circle-search-btn:active {
+      box-shadow: 0 2px 10px rgba(51,65,85,.15);
+    }
+    .circle-search-btn svg {
+      width: 1.7em;
+      height: 1.7em;
+      color: white;
+      pointer-events: none;
+      transition: transform .3s;
+    }
+    /* Expanded search area */
+    .circle-search-expander {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      top: 0;
+      z-index: 20;
+      display: flex;
+      align-items: flex-start;
+    }
+    .circle-search-area {
+      background: rgba(20,23,38,.95);
+      border-radius: 2.4em;
+      box-shadow: 0 4px 32px rgba(14,17,30,0.30);
+      display: flex;
+      align-items: center;
+      padding: 0.5em 1em 0.5em 2.5em;
+      min-width: 20em;
+      max-width: 100vw;
+      transition: width .35s cubic-bezier(.68,-0.55,.27,1.55);
+      position: relative;
+      animation: fadeIn .32s cubic-bezier(.4,0,.2,1);
+    }
+    .circle-search-area input {
+      border: none;
+      outline: none;
+      background: transparent;
+      color: #e0e7ef;
+      font-size: 1.2em;
+      flex: 1;
+      padding: 0.6em 0.4em;
+      font-family: 'Raleway', 'Inter', Arial, sans-serif;
+      font-weight: 600;
+      min-width: 7em;
+    }
+    .circle-search-area input::placeholder {
+      color: #cbd5e1;
+      font-weight: 400;
+      font-size: .98em;
+      opacity: .7;
+    }
+    .circle-search-close {
+      background: none;
+      border: none;
+      color: #cbd5e1;
+      font-size: 1.4em;
+      margin-left: 0.6em;
+      cursor: pointer;
+      opacity: 0.7;
+      transition: opacity .2s;
+      display: flex;
+      align-items: center;
+    }
+    .circle-search-close:hover { opacity: 1; }
+    /* Dropdown */
+    .circle-search-dropdown {
+      position: absolute;
+      top: 3.2em;
+      left: 0;
+      right: 0;
+      max-height: 16em;
+      overflow-y: auto;
+      background: rgba(38,44,60,0.97);
+      border-radius: 1.1em;
+      margin-top: 0.25em;
+      box-shadow: 0 6px 16px rgba(20,23,38,0.18);
+      z-index: 30;
+      animation: fadeIn .22s cubic-bezier(.4,0,.2,1);
+    }
+    .circle-search-option {
+      padding: 0.8em 1.1em;
+      cursor: pointer;
+      font-size: 1.08em;
+      color: #e0e7ef;
+      border-bottom: 1px solid #2a3142;
+      transition: background 0.18s;
+      font-family: Raleway,sans-serif;
+      font-weight: 500;
+    }
+    .circle-search-option:last-child { border-bottom: none; }
+    .circle-search-option:hover, .circle-search-option.selected {
+      background: linear-gradient(90deg, #0ea5e9 0 10%, #6366f1 90%);
+      color: #fff;
+    }
+    /* Responsive: input box shrinks on mobile */
+    @media (max-width: 600px) {
+      .circle-search-area { min-width: 90vw; padding-left: 3em; }
     }
   </style>
 </head>
@@ -123,22 +156,24 @@
 </header>
 
 <main class="p-6 max-w-6xl mx-auto">
-  <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-    <div class="glass p-4 rounded-xl col-span-1 md:col-span-3">
-      <label class="text-xs text-slate-300">Pick weapon</label>
-      <!-- Animated search input -->
-      <form class="search-box mt-2" autocomplete="off" onsubmit="return false;">
-        <input type="text" placeholder=" " id="gunSearch" class="search-box-input" autocomplete="off" />
-        <span class="search-box-label">Search weapon name...</span>
-        <button type="reset" class="search-box-reset" tabindex="-1" aria-label="Clear search" id="searchResetBtn">&times;</button>
-      </form>
-      <!-- Select -->
-      <div class="mt-4">
-        <select id="gunSelect" class="w-full rounded"></select>
+  <!-- Animated Circular Search -->
+  <section class="circle-search-container">
+    <button class="circle-search-btn" id="circleSearchBtn" aria-label="Search weapon">
+      <!-- Search icon SVG -->
+      <svg viewBox="0 0 24 24" fill="none">
+        <circle cx="11" cy="11" r="7" stroke="white" stroke-width="2"/>
+        <path d="M20 20L16.65 16.65" stroke="white" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <div class="circle-search-expander" id="circleSearchExpander" style="display:none;">
+      <div class="circle-search-area fade-in">
+        <input type="text" id="circleSearchInput" autocomplete="off" spellcheck="false" placeholder="Type to search weapon..." />
+        <button class="circle-search-close" id="circleSearchClose" aria-label="Close search">&times;</button>
+        <div class="circle-search-dropdown" id="circleSearchDropdown" style="display:none;"></div>
       </div>
-      <p id="gun-desc" class="mt-2 text-xs text-slate-400"></p>
     </div>
   </section>
+
   <section id="loadoutsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-5"></section>
   <div id="empty" class="mt-10 text-center text-slate-400">Select a weapon to see loadouts.</div>
 </main>
@@ -216,139 +251,168 @@
 <script>
 /* ------------------- Guns ------------------- */
 const GUNS = [
-  { id: "50gs", name: ".50 GS" },
-  { id: "agr556", name: "AGR-556" },
-  { id: "arctic50", name: "Arctic .50" },
-  { id: "by15", name: "BY15" },
-  { id: "chicom", name: "Chicom" },
-  { id: "chopper", name: "Chopper" },
-  { id: "cordite", name: "Cordite" },
-  { id: "cbr4", name: "CBR4" },
-  { id: "crossbow", name: "Crossbow" },
-  { id: "dlq33", name: "DL Q33" },
-  { id: "echo", name: "Echo Shotgun" },
-  { id: "fennec", name: "Fennec" },
-  { id: "gks", name: "GKS" },
-  { id: "hg40", name: "HG 40" },
-  { id: "holger26", name: "Holger 26" },
-  { id: "hades", name: "Hades" },
-  { id: "hs0405", name: "HS0405" },
-  { id: "hs2126", name: "HS2126" },
-  { id: "j358", name: "J358" },
-  { id: "kilobolt", name: "Kilo Bolt-Action" },
-  { id: "krm262", name: "KRM-262" },
-  { id: "locus", name: "Locus" },
-  { id: "m21ebr", name: "M21 EBR" },
-  { id: "m4lmg", name: "M4LMG" },
-  { id: "mk2", name: "MK2" },
-  { id: "msmc", name: "MSMC" },
-  { id: "mw11", name: "MW11" },
-  { id: "mx9", name: "MX9" },
-  { id: "na45", name: "NA-45" },
-  { id: "outlaw", name: "Outlaw" },
-  { id: "pdw57", name: "PDW-57" },
-  { id: "pharo", name: "Pharo" },
-  { id: "pp19bizon", name: "PP19 Bizon" },
-  { id: "qxr", name: "QXR" },
-  { id: "qq9", name: "QQ9" },
-  { id: "r90", name: "R9-0" },
-  { id: "razorback", name: "Razorback" },
-  { id: "renetti", name: "Renetti" },
-  { id: "rpd", name: "RPD" },
-  { id: "rus79u", name: "RUS-79U" },
-  { id: "rytecamr", name: "Rytec AMR" },
-  { id: "s36", name: "S36" },
-  { id: "shorty", name: "Shorty" },
-  { id: "sks", name: "SKS" },
-  { id: "spr208", name: "SP-R 208" },
-  { id: "striker", name: "Striker" },
-  { id: "svd", name: "SVD" },
-  { id: "ul736", name: "UL736" },
-  { id: "xpr50", name: "XPR-50" }
+  { id: "50gs", name: ".50 GS" },{ id: "agr556", name: "AGR-556" },{ id: "arctic50", name: "Arctic .50" },{ id: "by15", name: "BY15" },{ id: "chicom", name: "Chicom" },{ id: "chopper", name: "Chopper" },{ id: "cordite", name: "Cordite" },{ id: "cbr4", name: "CBR4" },{ id: "crossbow", name: "Crossbow" },{ id: "dlq33", name: "DL Q33" },{ id: "echo", name: "Echo Shotgun" },{ id: "fennec", name: "Fennec" },{ id: "gks", name: "GKS" },{ id: "hg40", name: "HG 40" },{ id: "holger26", name: "Holger 26" },{ id: "hades", name: "Hades" },{ id: "hs0405", name: "HS0405" },{ id: "hs2126", name: "HS2126" },{ id: "j358", name: "J358" },{ id: "kilobolt", name: "Kilo Bolt-Action" },{ id: "krm262", name: "KRM-262" },{ id: "locus", name: "Locus" },{ id: "m21ebr", name: "M21 EBR" },{ id: "m4lmg", name: "M4LMG" },{ id: "mk2", name: "MK2" },{ id: "msmc", name: "MSMC" },{ id: "mw11", name: "MW11" },{ id: "mx9", name: "MX9" },{ id: "na45", name: "NA-45" },{ id: "outlaw", name: "Outlaw" },{ id: "pdw57", name: "PDW-57" },{ id: "pharo", name: "Pharo" },{ id: "pp19bizon", name: "PP19 Bizon" },{ id: "qxr", name: "QXR" },{ id: "qq9", name: "QQ9" },{ id: "r90", name: "R9-0" },{ id: "razorback", name: "Razorback" },{ id: "renetti", name: "Renetti" },{ id: "rpd", name: "RPD" },{ id: "rus79u", name: "RUS-79U" },{ id: "rytecamr", name: "Rytec AMR" },{ id: "s36", name: "S36" },{ id: "shorty", name: "Shorty" },{ id: "sks", name: "SKS" },{ id: "spr208", name: "SP-R 208" },{ id: "striker", name: "Striker" },{ id: "svd", name: "SVD" },{ id: "ul736", name: "UL736" },{ id: "xpr50", name: "XPR-50" }
 ];
 
-const gunSelect = document.getElementById('gunSelect');
+// For demo: fill the submit modal weapon dropdown
 const submitGun = document.getElementById('submitGun');
-const gunSearch = document.getElementById('gunSearch');
-const searchLabel = document.querySelector('.search-box-label');
-const searchResetBtn = document.getElementById('searchResetBtn');
-
-/* Populate select options */
-function populateGunSelect(filteredGuns, selectedId = "") {
-  gunSelect.innerHTML = `<option value="">— Select weapon —</option>`;
-  filteredGuns.forEach(g => {
-    gunSelect.innerHTML += `<option value="${g.id}"${g.id === selectedId ? ' selected' : ''}>${g.name}</option>`;
-  });
-}
-
 function populateSubmitGunSelect() {
   submitGun.innerHTML = `<option value="">— Select weapon —</option>`;
   GUNS.forEach(g => {
     submitGun.innerHTML += `<option value="${g.id}">${g.name}</option>`;
   });
 }
-
-populateGunSelect(GUNS);
 populateSubmitGunSelect();
 
-/* Search & auto-select logic */
-gunSearch.addEventListener('input', () => {
-  const val = gunSearch.value.trim().toLowerCase();
-  if (!val) {
-    populateGunSelect(GUNS);
+/* ------------------- Circle Search UI Logic ------------------- */
+const searchBtn = document.getElementById('circleSearchBtn');
+const expander = document.getElementById('circleSearchExpander');
+const searchInput = document.getElementById('circleSearchInput');
+const searchClose = document.getElementById('circleSearchClose');
+const searchDropdown = document.getElementById('circleSearchDropdown');
+
+let searchOpen = false;
+let selectedIdx = -1;
+let filtered = GUNS.slice();
+let selectedGun = null;
+
+function openSearch() {
+  expander.style.display = 'flex';
+  setTimeout(() => searchInput.focus(), 80);
+  searchOpen = true;
+  renderDropdown();
+}
+function closeSearch() {
+  expander.style.display = 'none';
+  searchInput.value = "";
+  searchDropdown.style.display = "none";
+  selectedIdx = -1;
+  filtered = GUNS.slice();
+  searchOpen = false;
+  // Optionally: clear selection if not desired to keep after close
+  // selectedGun = null;
+  renderSelection();
+}
+
+function renderDropdown() {
+  // Filtered options based on input
+  let val = searchInput.value.trim().toLowerCase();
+  if (!val) filtered = GUNS.slice();
+  else {
+    const startsWith = GUNS.filter(g => g.name.toLowerCase().startsWith(val)).sort((a,b)=>a.name.localeCompare(b.name));
+    const includes = GUNS.filter(g => g.name.toLowerCase().includes(val) && !g.name.toLowerCase().startsWith(val)).sort((a,b)=>a.name.localeCompare(b.name));
+    filtered = startsWith.concat(includes);
+  }
+  // If nothing matches
+  if (filtered.length === 0) {
+    searchDropdown.innerHTML = `<div class="circle-search-option text-slate-400 cursor-default">No weapons found</div>`;
+    searchDropdown.style.display = "block";
+    selectedIdx = -1;
     return;
   }
-  // Prioritize guns that start with query, then others that include query (both alphabetically)
-  let startsWith = [];
-  let includes = [];
-  GUNS.forEach(g => {
-    const n = g.name.toLowerCase();
-    if (n.startsWith(val)) startsWith.push(g);
-    else if (n.includes(val)) includes.push(g);
-  });
-  startsWith.sort((a, b) => a.name.localeCompare(b.name));
-  includes.sort((a, b) => a.name.localeCompare(b.name));
-  const filtered = startsWith.concat(includes);
+  // Render options
+  searchDropdown.innerHTML = filtered.map((g, i) =>
+    `<div class="circle-search-option${i === selectedIdx ? " selected" : ""}" data-id="${g.id}">${g.name}</div>`
+  ).join("");
+  searchDropdown.style.display = "block";
+}
 
-  // If only one result, auto-select it
-  let selectedId = "";
-  if (filtered.length === 1) selectedId = filtered[0].id;
-  else if (filtered.length > 1 && startsWith.length === 1) selectedId = startsWith[0].id;
-
-  populateGunSelect(filtered, selectedId);
-
-  // Also set select box value
-  if (selectedId) {
-    gunSelect.value = selectedId;
+function renderSelection() {
+  // Show the selected gun in the closed search button (optional: you can replace icon with gun name)
+  if (selectedGun) {
+    searchBtn.innerHTML = `<span style="font-size:1.1em;font-weight:600;color:#fff;">${selectedGun.name}</span>`;
   } else {
-    gunSelect.value = "";
+    searchBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="white" stroke-width="2"/><path d="M20 20L16.65 16.65" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>`;
+  }
+  // Optionally: show/hide loadouts for selectedGun.id here
+  // If selectedGun is set, update the loadouts section
+  // Else show empty state
+  updateLoadoutSection();
+}
+
+// Select a gun by index in filtered array
+function selectGun(idx) {
+  if (idx < 0 || idx >= filtered.length) return;
+  selectedGun = filtered[idx];
+  closeSearch();
+  renderSelection();
+}
+
+// Event handlers
+searchBtn.onclick = function() {
+  if (searchOpen) return;
+  openSearch();
+};
+searchClose.onclick = closeSearch;
+
+searchInput.addEventListener('input', () => {
+  selectedIdx = -1;
+  renderDropdown();
+});
+
+searchInput.addEventListener('keydown', e => {
+  if (!filtered.length) return;
+  if (e.key === 'ArrowDown') {
+    selectedIdx = (selectedIdx + 1) % filtered.length;
+    renderDropdown();
+    setTimeout(() => scrollToSelected(), 0);
+    e.preventDefault();
+  } else if (e.key === 'ArrowUp') {
+    selectedIdx = (selectedIdx - 1 + filtered.length) % filtered.length;
+    renderDropdown();
+    setTimeout(() => scrollToSelected(), 0);
+    e.preventDefault();
+  } else if (e.key === 'Enter') {
+    if (selectedIdx >= 0 && selectedIdx < filtered.length) {
+      selectGun(selectedIdx);
+      e.preventDefault();
+    }
+  } else if (e.key === 'Escape') {
+    closeSearch();
+    e.preventDefault();
   }
 });
 
-// If select box changes, update search box with name
-gunSelect.addEventListener('change', () => {
-  const selected = GUNS.find(g => g.id === gunSelect.value);
-  if (selected) {
-    gunSearch.value = selected.name;
-    gunSearch.dispatchEvent(new Event('input')); // Re-run filter for consistency
+// Click option
+searchDropdown.addEventListener('mousedown', function(e) {
+  const target = e.target.closest('.circle-search-option');
+  if (!target || target.classList.contains('text-slate-400')) return;
+  const idx = Array.from(searchDropdown.children).indexOf(target);
+  selectGun(idx);
+});
+
+// Keep dropdown open on input focus, close when clicking outside
+document.addEventListener('mousedown', function(e) {
+  if (!searchOpen) return;
+  if (
+    !expander.contains(e.target) &&
+    e.target !== searchBtn
+  ) {
+    closeSearch();
   }
 });
 
-// Reset/cancel search
-searchResetBtn.addEventListener('click', () => {
-  gunSearch.value = "";
-  gunSearch.focus();
-  populateGunSelect(GUNS);
-});
+// Scroll to selected option if using keyboard
+function scrollToSelected() {
+  const sel = searchDropdown.querySelector('.circle-search-option.selected');
+  if (sel) sel.scrollIntoView({block:'nearest',behavior:'smooth'});
+}
 
-/* Animation for search box label (for browsers that don't support :placeholder-shown well) */
-gunSearch.addEventListener('focus', () => {
-  searchLabel.classList.add('active');
-});
-gunSearch.addEventListener('blur', () => {
-  if (!gunSearch.value) searchLabel.classList.remove('active');
-});
-
+// --- DEMO: You can hook selectedGun to your loadouts logic below --- //
+function updateLoadoutSection() {
+  const container = document.getElementById('loadoutsContainer');
+  const empty = document.getElementById('empty');
+  if (!selectedGun) {
+    container.innerHTML = "";
+    empty.style.display = "";
+    return;
+  }
+  // For demo: just show gun name
+  container.innerHTML = `<div class="glass p-6 rounded-xl text-center text-lg font-bold fade-in" style="font-size:2em;">${selectedGun.name}</div>`;
+  empty.style.display = "none";
+}
+// Render initial UI
+renderSelection();
 </script>
 </body>
 </html>
