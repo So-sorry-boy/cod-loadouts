@@ -289,7 +289,7 @@ function populateGuns() {
   gunSelect.innerHTML = '<option value="">— Select weapon —</option>';
   submitGun.innerHTML = '';
   for (const g of GUNS) {
-    gunSelect.innerHTML += `<option value="${g.id}">${g.name} — ${g.type}</option>`;
+    gunSelect.innerHTML += `<option value="${g.id}">${g.name}</option>`;
     submitGun.innerHTML += `<option value="${g.id}">${g.name}</option>`;
   }
 }
