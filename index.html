@@ -41,6 +41,63 @@
   }
 </style>
 <style>
+  /* Glass-style animated search box */
+.searchBox {
+    position: relative;
+    max-width: 400px;
+    margin: 0 auto;
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
+}
+
+.searchBox:hover {
+    box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+    transform: scale(1.02);
+}
+
+.searchInput {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: #f0f0f0;
+    font-size: 16px;
+    padding: 0 15px;
+    width: 0;
+    transition: width 0.4s cubic-bezier(0.4,0,0.2,1), padding 0.4s;
+}
+
+.searchBox:hover .searchInput {
+    width: 250px;
+    padding: 0 15px;
+}
+
+.searchButton {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255,255,255,0.1);
+    color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.4s;
+}
+
+.searchBox:hover .searchButton {
+    background: #f0f0f0;
+    color: #1f2937; /* dark text when hovered */
+}
+
   /* Style the select box itself */
   #gunSelect {
     text-align: center;           /* center text */
@@ -71,7 +128,6 @@
     border-bottom: none;
   }
 </style>
-
 </head>
 <body class="text-slate-100 min-h-screen antialiased">
 
@@ -98,12 +154,11 @@
   <label class="text-xs text-slate-300">Pick weapon</label>
 
   <!-- SEARCH INPUT -->
-  <div class="mt-2">
-    <input id="gunSearch"
-           placeholder="Search guns (type & press Enter to pick first match)"
-           class="w-full p-2 rounded bg-transparent border border-slate-700 text-sm" />
-  </div>
-
+ <div class="searchBox mt-2">
+  <input id="gunSearch" class="searchInput" type="text" placeholder="Search guns...">
+  <button class="searchButton">🔍</button>
+</div>
+        
   <!-- SELECT (filtered by search) -->
   <div class="mt-2">
     <select id="gunSelect" class="w-full rounded p-2 bg-transparent border border-slate-700"></select>
