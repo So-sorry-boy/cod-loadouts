@@ -230,6 +230,44 @@ function populateGuns() {
   }
 }
 populateGuns();
+/* ===== Add searchable-select behaviour for gun selection ===== */
+const gunSearch = document.getElementById('gunSearch');
+
+if (gunSearch) {
+  // Filter select options while typing
+  gunSearch.addEventListener('input', (e) => {
+    const q = (e.target.value || '').toLowerCase().trim();
+    let firstVisible = null;
+
+    for (const opt of gunSelect.options) {
+      const match = !q || opt.text.toLowerCase().includes(q);
+      opt.hidden = !match;
+      if (match && !firstVisible) firstVisible = opt;
+    }
+
+    // Auto-select first visible match so loadouts update instantly
+    if (firstVisible) {
+      gunSelect.value = firstVisible.value;
+      gunSelect.dispatchEvent(new Event('change'));
+    } else {
+      gunSelect.value = "";
+      gunSelect.dispatchEvent(new Event('change'));
+    }
+  });
+
+  // Press Enter in search -> select first visible option and focus the select
+  gunSearch.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const first = Array.from(gunSelect.options).find(o => !o.hidden);
+      if (first) {
+        gunSelect.value = first.value;
+        gunSelect.dispatchEvent(new Event('change'));
+        gunSelect.focus();
+      }
+    }
+  });
+}
 
 /* event: show gun desc & loadouts */
 gunSelect.addEventListener('change', () => {
