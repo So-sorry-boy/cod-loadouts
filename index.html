@@ -5,684 +5,236 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>COD Loadouts Hub — Demo</title>
 
-  <!-- Tailwind via CDN (no build needed) -->
+  <!-- Tailwind via CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
-    /* small custom styles & animations */
-    body { background: radial-gradient(1200px 600px at 10% 10%, #071026 0%, #05060a 35%, #020203 100%); }
-    .glass { backdrop-filter: blur(6px); background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.04); }
-    .card-hover:hover { transform: translateY(-6px) scale(1.01); transition: transform .25s ease; box-shadow: 0 10px 30px rgba(0,0,0,0.6); }
-    .stat-bar { transition: width .7s cubic-bezier(.2,.9,.2,1); height: 8px; border-radius: 999px; }
-    .star { cursor: pointer; transition: transform .12s ease; }
-    .star:hover { transform: scale(1.08); }
-    .fade-in { animation: fadeIn .35s ease both; }
-    @keyframes fadeIn { from {opacity:0; transform: translateY(6px)} to {opacity:1; transform:none} }
-  </style>
-  <style>
-  /* Normal state of select box */
-  #gunSelect {
-    background-color: white;
-    color: black;
-  }
-
-  /* Options text color */
-  #gunSelect option {
-    background-color: white;
-    color: black;
-  }
-
-  /* Hover and selected styles */
-  #gunSelect option:hover,
-  #gunSelect option:checked,
-  #gunSelect option:focus {
-    background-color: #b8860b; /* dark gold */
-    color: white;
-  }
-</style>
-<style>
-  /* Glass-style animated search box */
-.searchBox {
-    position: relative;
-    max-width: 400px;
-    margin: 0 auto;
-    background: rgba(255,255,255,0.05);
-    backdrop-filter: blur(6px);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    overflow: hidden;
-    transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
-}
-
-.searchBox:hover {
-    box-shadow: 0 10px 25px rgba(0,0,0,0.6);
-    transform: scale(1.02);
-}
-
-.searchInput {
-    flex: 1;
-    border: none;
-    outline: none;
-    background: transparent;
-    color: #f0f0f0;
-    font-size: 16px;
-    padding: 0 15px;
-    width: 0;
-    transition: width 0.4s cubic-bezier(0.4,0,0.2,1), padding 0.4s;
-}
-
-.searchBox:hover .searchInput {
-    width: 250px;
-    padding: 0 15px;
-}
-
-.searchButton {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    border: none;
-    background: rgba(255,255,255,0.1);
-    color: #f0f0f0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    transition: all 0.4s;
-}
-
-.searchBox:hover .searchButton {
-    background: #f0f0f0;
-    color: #1f2937; /* dark text when hovered */
-}
-
-  /* Style the select box itself */
-  #gunSelect {
-    text-align: center;           /* center text */
-    text-align-last: center;      /* center the selected option */
-    background-color: white;
-    color: black;
-    border: 1px solid #d1d5db;
-    border-radius: 8px;
-    padding: 8px;
-  }
-
-  /* Style the dropdown options */
-  #gunSelect option {
-    color: black;
-    padding: 10px;
-    border-bottom: 1px solid #e5e7eb; /* subtle separator line */
-  }
-
-  #gunSelect option:hover,
-  #gunSelect option:checked,
-  #gunSelect option:focus {
-    background-color: #b8860b; /* dark gold */
-    color: white;
-  }
-
-  /* remove last border line */
-  #gunSelect option:last-child {
-    border-bottom: none;
-  }
-</style>
-<style>
+    /* Body background */
     body {
       background: radial-gradient(1200px 600px at 10% 10%, #071026 0%, #05060a 35%, #020203 100%);
     }
 
-    .searchBox {
-      position: relative;
-      display: inline-block;
-      font-size: 20px;
-      border: 2px solid #ffffff33; /* light glassy border */
-      border-radius: 2.5em;
-      overflow: hidden;
-      height: 40px;
-      transition: all 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    /* Glass card & hover effect */
+    .glass { backdrop-filter: blur(6px); background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.04); }
+    .card-hover:hover { transform: translateY(-6px) scale(1.01); transition: transform .25s ease; box-shadow: 0 10px 30px rgba(0,0,0,0.6); }
+    .fade-in { animation: fadeIn .35s ease both; }
+    @keyframes fadeIn { from {opacity:0; transform: translateY(6px)} to {opacity:1; transform:none} }
+
+    /* Select box */
+    #gunSelect, #submitGun {
+      text-align: center;
+      text-align-last: center;
+      background-color: white;
+      color: black;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      padding: 8px;
+    }
+    #gunSelect option, #submitGun option {
+      color: black;
+      padding: 10px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    #gunSelect option:hover, #gunSelect option:checked, #gunSelect option:focus,
+    #submitGun option:hover, #submitGun option:checked, #submitGun option:focus {
+      background-color: #b8860b;
+      color: white;
+    }
+    #gunSelect option:last-child, #submitGun option:last-child {
+      border-bottom: none;
     }
 
-    .searchInput {
+    /* Glitch-free animated search box */
+    .search-box {
+      font-size: 20px;
+      display: inline-block;
+      position: relative;
+      border-radius: 2.5em;
+      width: 100%;
+    }
+    .search-box-input {
       font-family: Raleway, sans-serif;
       font-weight: bold;
-      width: 40px;
-      height: 40px;
-      padding: 0.3em 0.4em;
+      width: 2.5em;
+      height: 2.5em;
+      padding: 0.3em 2.1em 0.3em 0.4em;
       border: none;
+      box-sizing: border-box;
+      border-radius: 2.5em;
+      transition: width 800ms cubic-bezier(0.68, -0.55, 0.27, 1.55);
       background: rgba(255,255,255,0.05);
       color: #fff;
-      border-radius: 2.5em;
-      transition: width 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
     }
-
-    .searchBox:hover > .searchInput,
-    .searchInput:focus {
-      width: 240px;
-      padding: 0.3em 2.1em 0.3em 0.4em;
+    .search-box-input:focus {
       outline: none;
+      width: 100%;
       background: rgba(255,255,255,0.08);
     }
-
-    .searchButton {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.05);
+    .search-box-reset {
+      background-color: transparent;
+      width: 1.4em;
+      height: 1.4em;
+      border: 0;
+      padding: 0;
       display: flex;
       justify-content: center;
       align-items: center;
-      color: #fff;
       position: absolute;
-      right: 0.2em;
-      top: 0.2em;
-      border: none;
+      top: 0.55em;
+      right: 0.55em;
       cursor: pointer;
-      transition: background 0.4s, transform 0.4s;
-    }
-
-    .searchBox:hover > .searchButton,
-    .searchButton:focus {
-      background: rgba(255,255,255,0.2);
-      transform: scale(1.1);
-    }
-
-    @media screen and (max-width: 620px) {
-      .searchBox:hover > .searchInput,
-      .searchInput:focus {
-        width: 150px;
-      }
+      font-size: 1.1em;
     }
   </style>
 </head>
 <body class="text-slate-100 min-h-screen antialiased">
 
-  <header class="p-6 flex items-center justify-between">
-    <div class="flex items-center gap-4">
-      <div class="w-12 h-12 rounded-full flex items-center justify-center bg-gradient-to-br from-teal-400 to-indigo-600 shadow-lg">
-        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none"><path d="M3 12h18" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
-      </div>
-      <div>
-        <h1 class="text-2xl font-extrabold">COD Loadouts Hub</h1>
-        <p class="text-xs text-slate-300">Community loadouts — BR & Multiplayer (demo)</p>
-      </div>
+<header class="p-6 flex items-center justify-between">
+  <div class="flex items-center gap-4">
+    <div class="w-12 h-12 rounded-full flex items-center justify-center bg-gradient-to-br from-teal-400 to-indigo-600 shadow-lg">
+      <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none"><path d="M3 12h18" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
     </div>
-
-    <div class="flex items-center gap-3">
-      <button id="open-submit" class="px-4 py-2 rounded-md glass text-sm">Submit loadout</button>
-      <button id="reset" title="Clear saved demo data (for testing)" class="px-3 py-2 rounded-md bg-red-600/30 text-sm">Reset demo</button>
-    </div>
-  </header>
-
-  <main class="p-6 max-w-6xl mx-auto">
-    <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-      <div class="glass p-4 rounded-xl">
-  <label class="text-xs text-slate-300">Pick weapon</label>
-
-  <!-- SEARCH INPUT -->
- <div class="searchBox mt-2">
-  <input id="gunSearch" class="searchInput" type="text" placeholder="Search guns...">
-  <button class="searchButton">🔍</button>
-</div>
-        
-  <!-- SELECT (filtered by search) -->
-  <div class="mt-2">
-    <select id="gunSelect" class="w-full rounded p-2 bg-transparent border border-slate-700"></select>
-  </div>
-
-  <p id="gun-desc" class="mt-2 text-xs text-slate-400"></p>
-</div>
-
-      <div class="glass p-4 rounded-xl">
-        <label class="text-xs text-slate-300">Quick tips</label>
-        <div class="mt-3 text-sm">
-          <ul class="list-disc ml-4 text-slate-300">
-            <li>Use <strong>Submit loadout</strong> to add your build (saved in your browser).</li>
-            <li>Ratings & comments are stored locally in your browser in this demo.</li>
-            <li>To make comments public for everyone, follow the Firebase steps inside the code later.</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <section id="loadoutsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-5"></section>
-
-    <div id="empty" class="mt-10 text-center text-slate-400">Select a weapon to see loadouts.</div>
-  </main>
-
-  <!-- Submit modal (hidden by default) -->
-  <div id="submitModal" class="fixed inset-0 z-40 hidden items-center justify-center p-4">
-    <div class="absolute inset-0 bg-black/60" id="closeBackdrop"></div>
-    <div class="relative w-full max-w-2xl glass rounded-xl p-5 z-50">
-      <div class="flex items-center justify-between mb-4">
-        <h3 class="text-lg font-semibold">Submit a new loadout (demo)</h3>
-        <button id="closeSubmit" class="text-slate-300">✕</button>
-      </div>
-
-      <form id="submitForm" class="space-y-3 text-sm">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <label class="flex flex-col">
-            <span class="text-xs text-slate-300">Weapon</span>
-            <select id="submitGun" class="p-2 rounded bg-transparent border border-slate-700"></select>
-          </label>
-
-          <label class="flex flex-col">
-            <span class="text-xs text-slate-300">Mode</span>
-            <select id="submitMode" class="p-2 rounded bg-transparent border border-slate-700">
-              <option>MP</option>
-              <option>BR</option>
-            </select>
-          </label>
-        </div>
-
-        <label class="flex flex-col">
-          <span class="text-xs text-slate-300">Purpose (e.g., Fast ADS)</span>
-          <input id="submitPurpose" class="p-2 rounded bg-transparent border border-slate-700" />
-        </label>
-
-        <label class="flex flex-col">
-          <span class="text-xs text-slate-300">Attachments (comma separated)</span>
-          <input id="submitAtt" class="p-2 rounded bg-transparent border border-slate-700" />
-        </label>
-
-        <label class="flex flex-col">
-          <span class="text-xs text-slate-300">Pros (comma separated)</span>
-          <input id="submitPros" class="p-2 rounded bg-transparent border border-slate-700" />
-        </label>
-
-        <label class="flex flex-col">
-          <span class="text-xs text-slate-300">Cons (comma separated)</span>
-          <input id="submitCons" class="p-2 rounded bg-transparent border border-slate-700" />
-        </label>
-
-        <label class="flex flex-col">
-          <span class="text-xs text-slate-300">Used by (optional)</span>
-          <input id="submitUsed" class="p-2 rounded bg-transparent border border-slate-700" />
-        </label>
-
-        <label class="flex flex-col">
-          <span class="text-xs text-slate-300">Tips (short)</span>
-          <textarea id="submitTips" class="p-2 rounded bg-transparent border border-slate-700"></textarea>
-        </label>
-
-        <div class="flex items-center gap-3">
-          <button type="submit" class="px-4 py-2 rounded-md bg-emerald-500">Submit</button>
-          <button type="button" id="previewBtn" class="px-4 py-2 rounded-md glass">Preview</button>
-        </div>
-
-        <p class="text-xs text-slate-400">Note: This demo saves new loadouts to your browser only. Later you can connect to Firebase to make them public.</p>
-      </form>
+    <div>
+      <h1 class="text-2xl font-extrabold">COD Loadouts Hub</h1>
+      <p class="text-xs text-slate-300">Community loadouts — BR & Multiplayer (demo)</p>
     </div>
   </div>
 
-  <!-- simple template footer -->
-  <footer class="py-6 text-center text-slate-500 text-xs">Demo — Save to browser. Later: Replace localStorage with Firebase for public storage.</footer>
+  <div class="flex items-center gap-3">
+    <button id="open-submit" class="px-4 py-2 rounded-md glass text-sm">Submit loadout</button>
+    <button id="reset" title="Clear saved demo data" class="px-3 py-2 rounded-md bg-red-600/30 text-sm">Reset demo</button>
+  </div>
+</header>
+
+<main class="p-6 max-w-6xl mx-auto">
+  <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+    <div class="glass p-4 rounded-xl">
+      <label class="text-xs text-slate-300">Pick weapon</label>
+
+      <!-- Search input -->
+      <div class="search-box mt-2">
+        <input id="gunSearch" class="search-box-input" type="text" placeholder="Search guns...">
+      </div>
+
+      <!-- Select -->
+      <div class="mt-2">
+        <select id="gunSelect" class="w-full rounded p-2"></select>
+      </div>
+
+      <p id="gun-desc" class="mt-2 text-xs text-slate-400"></p>
+    </div>
+
+    <div class="glass p-4 rounded-xl">
+      <label class="text-xs text-slate-300">Quick tips</label>
+      <div class="mt-3 text-sm">
+        <ul class="list-disc ml-4 text-slate-300">
+          <li>Use <strong>Submit loadout</strong> to add your build (saved in your browser).</li>
+          <li>Ratings & comments are stored locally in your browser in this demo.</li>
+          <li>To make comments public, you can later connect Firebase.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="loadoutsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-5"></section>
+  <div id="empty" class="mt-10 text-center text-slate-400">Select a weapon to see loadouts.</div>
+</main>
+
+<!-- Submit modal -->
+<div id="submitModal" class="fixed inset-0 z-40 hidden items-center justify-center p-4">
+  <div class="absolute inset-0 bg-black/60" id="closeBackdrop"></div>
+  <div class="relative w-full max-w-2xl glass rounded-xl p-5 z-50">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="text-lg font-semibold">Submit a new loadout (demo)</h3>
+      <button id="closeSubmit" class="text-slate-300">✕</button>
+    </div>
+
+    <form id="submitForm" class="space-y-3 text-sm">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <label class="flex flex-col">
+          <span class="text-xs text-slate-300">Weapon</span>
+          <select id="submitGun" class="p-2 rounded bg-transparent border border-slate-700"></select>
+        </label>
+
+        <label class="flex flex-col">
+          <span class="text-xs text-slate-300">Mode</span>
+          <select id="submitMode" class="p-2 rounded bg-transparent border border-slate-700">
+            <option>MP</option>
+            <option>BR</option>
+          </select>
+        </label>
+      </div>
+
+      <label class="flex flex-col">
+        <span class="text-xs text-slate-300">Purpose</span>
+        <input id="submitPurpose" class="p-2 rounded bg-transparent border border-slate-700" />
+      </label>
+
+      <label class="flex flex-col">
+        <span class="text-xs text-slate-300">Attachments (comma separated)</span>
+        <input id="submitAtt" class="p-2 rounded bg-transparent border border-slate-700" />
+      </label>
+
+      <label class="flex flex-col">
+        <span class="text-xs text-slate-300">Pros (comma separated)</span>
+        <input id="submitPros" class="p-2 rounded bg-transparent border border-slate-700" />
+      </label>
+
+      <label class="flex flex-col">
+        <span class="text-xs text-slate-300">Cons (comma separated)</span>
+        <input id="submitCons" class="p-2 rounded bg-transparent border border-slate-700" />
+      </label>
+
+      <label class="flex flex-col">
+        <span class="text-xs text-slate-300">Used by (optional)</span>
+        <input id="submitUsed" class="p-2 rounded bg-transparent border border-slate-700" />
+      </label>
+
+      <label class="flex flex-col">
+        <span class="text-xs text-slate-300">Tips (short)</span>
+        <textarea id="submitTips" class="p-2 rounded bg-transparent border border-slate-700"></textarea>
+      </label>
+
+      <div class="flex items-center gap-3">
+        <button type="submit" class="px-4 py-2 rounded-md bg-emerald-500">Submit</button>
+        <button type="button" id="previewBtn" class="px-4 py-2 rounded-md glass">Preview</button>
+      </div>
+
+      <p class="text-xs text-slate-400">Demo saves new loadouts to your browser only. Connect Firebase later for public storage.</p>
+    </form>
+  </div>
+</div>
+
+<footer class="py-6 text-center text-slate-500 text-xs">Demo — Save to browser. Later: Replace localStorage with Firebase for public storage.</footer>
 
 <script>
-/* -----------------------------------------
-   Sample data: edit or extend these arrays
-   in the file directly via GitHub web editor
-   ----------------------------------------- */
+/* ------------------- Guns ------------------- */
 const GUNS = [
   { id: "50gs", name: ".50 GS" },
   { id: "agr556", name: "AGR-556" },
   { id: "arctic50", name: "Arctic .50" },
   { id: "by15", name: "BY15" },
-  { id: "chicom", name: "Chicom" },
-  { id: "chopper", name: "Chopper" },
-  { id: "cordite", name: "Cordite" },
-  { id: "cbr4", name: "CBR4" },
-  { id: "crossbow", name: "Crossbow" },
-  { id: "dlq33", name: "DL Q33" },
-  { id: "echo", name: "Echo Shotgun" },
-  { id: "fennec", name: "Fennec" },
-  { id: "gks", name: "GKS" },
-  { id: "hg40", name: "HG 40" },
-  { id: "holger26", name: "Holger 26" },
-  { id: "hades", name: "Hades" },
-  { id: "hs0405", name: "HS0405" },
-  { id: "hs2126", name: "HS2126" },
-  { id: "j358", name: "J358" },
-  { id: "kilobolt", name: "Kilo Bolt-Action" },
-  { id: "krm262", name: "KRM-262" },
-  { id: "locus", name: "Locus" },
-  { id: "m21ebr", name: "M21 EBR" },
-  { id: "m4lmg", name: "M4LMG" },
-  { id: "mk2", name: "MK2" },
-  { id: "msmc", name: "MSMC" },
-  { id: "mw11", name: "MW11" },
-  { id: "mx9", name: "MX9" },
-  { id: "na45", name: "NA-45" },
-  { id: "outlaw", name: "Outlaw" },
-  { id: "pdw57", name: "PDW-57" },
-  { id: "pharo", name: "Pharo" },
-  { id: "pp19bizon", name: "PP19 Bizon" },
-  { id: "qxr", name: "QXR" },
-  { id: "qq9", name: "QQ9" },
-  { id: "r90", name: "R9-0" },
-  { id: "razorback", name: "Razorback" },
-  { id: "renetti", name: "Renetti" },
-  { id: "rpd", name: "RPD" },
-  { id: "rus79u", name: "RUS-79U" },
-  { id: "rytecamr", name: "Rytec AMR" },
-  { id: "s36", name: "S36" },
-  { id: "shorty", name: "Shorty" },
-  { id: "sks", name: "SKS" },
-  { id: "spr208", name: "SP-R 208" },
-  { id: "striker", name: "Striker" },
-  { id: "svd", name: "SVD" },
-  { id: "ul736", name: "UL736" },
-  { id: "xpr50", name: "XPR-50" }
+  { id: "chicom", name: "Chicom" }
 ];
 
-
-/* ---------- local storage keys ---------- */
-const LS_CUSTOM_LOADOUTS = "cod_demo_custom_loadouts_v1";
-const LS_COMMENTS_PREFIX = "cod_demo_comments_"; // + loadoutId
-const LS_RATINGS_PREFIX = "cod_demo_ratings_";   // + loadoutId
-
-/* ---------- utility functions ---------- */
-function saveCustomLoadouts(arr) { localStorage.setItem(LS_CUSTOM_LOADOUTS, JSON.stringify(arr || [])); }
-function loadCustomLoadouts() { try { return JSON.parse(localStorage.getItem(LS_CUSTOM_LOADOUTS)) || []; } catch(e){return [];} }
-function getAllLoadouts() { return [...SAMPLE_LOADOUTS, ...loadCustomLoadouts()]; }
-
-/* ---------- DOM refs ---------- */
-const gunSelect = document.getElementById("gunSelect");
-const submitGun = document.getElementById("submitGun");
-const gunDesc = document.getElementById("gun-desc");
-const loadoutsContainer = document.getElementById("loadoutsContainer");
-const emptyEl = document.getElementById("empty");
-const modeSelect = document.getElementById("modeSelect");
-
-/* populate selects */
-function populateGuns() {
-  gunSelect.innerHTML = '<option value="">— Select weapon —</option>';
-  submitGun.innerHTML = '';
-  for (const g of GUNS) {
-    gunSelect.innerHTML += `<option value="${g.id}">${g.name}</option>`;
-    submitGun.innerHTML += `<option value="${g.id}">${g.name}</option>`;
-  }
-}
-populateGuns();
-/* ===== Add searchable-select behaviour for gun selection ===== */
+const gunSelect = document.getElementById('gunSelect');
+const submitGun = document.getElementById('submitGun');
 const gunSearch = document.getElementById('gunSearch');
 
-if (gunSearch) {
-  // Filter select options while typing
-  gunSearch.addEventListener('input', (e) => {
-    const q = (e.target.value || '').toLowerCase().trim();
-    let firstVisible = null;
-
-    for (const opt of gunSelect.options) {
-      const match = !q || opt.text.toLowerCase().includes(q);
-      opt.hidden = !match;
-      if (match && !firstVisible) firstVisible = opt;
-    }
-
-    // Auto-select first visible match so loadouts update instantly
-    if (firstVisible) {
-      gunSelect.value = firstVisible.value;
-      gunSelect.dispatchEvent(new Event('change'));
-    } else {
-      gunSelect.value = "";
-      gunSelect.dispatchEvent(new Event('change'));
-    }
-  });
-
-  // Press Enter in search -> select first visible option and focus the select
-  gunSearch.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      const first = Array.from(gunSelect.options).find(o => !o.hidden);
-      if (first) {
-        gunSelect.value = first.value;
-        gunSelect.dispatchEvent(new Event('change'));
-        gunSelect.focus();
-      }
-    }
-  });
-}
-
-/* event: show gun desc & loadouts */
-gunSelect.addEventListener('change', () => {
-  const id = gunSelect.value;
-  const gun = GUNS.find(g => g.id === id);
-  gunDesc.textContent = gun ? gun.desc : '';
-  renderLoadouts();
-});
-modeSelect.addEventListener('change', renderLoadouts);
-
-/* render loadouts */
-function renderLoadouts(){
-  const gunId = gunSelect.value;
-  const mode = modeSelect.value;
-  const loadouts = getAllLoadouts().filter(l => {
-    if (gunId && l.gunId !== gunId) return false;
-    if (mode !== "all" && l.mode !== mode) return false;
-    return true;
-  });
-
-  loadoutsContainer.innerHTML = '';
-  if (!loadouts.length) {
-    emptyEl.style.display = 'block';
-    return;
-  }
-  emptyEl.style.display = 'none';
-
-  for (const l of loadouts) {
-    const card = createLoadoutCard(l);
-    loadoutsContainer.appendChild(card);
-  }
-}
-
-/* create loadout card element */
-function createLoadoutCard(loadout) {
-  const el = document.createElement('article');
-  el.className = "glass rounded-xl p-4 card-hover fade-in";
-
-  // header row
-  const gun = GUNS.find(g => g.id === loadout.gunId) || {name: loadout.gunId};
-  el.innerHTML = `
-    <div class="flex items-start gap-3">
-      <div class="w-14 h-10 rounded bg-slate-800 flex items-center justify-center text-xs">${gun.name}</div>
-      <div class="flex-1">
-        <div class="flex items-center justify-between">
-          <div>
-            <div class="text-sm font-semibold">${loadout.purpose} <span class="text-xs text-slate-400">(${loadout.mode})</span></div>
-            <div class="text-xs text-slate-400">Used by: ${loadout.usedBy || '—'}</div>
-          </div>
-          <div class="text-sm text-slate-300" id="rating-${loadout.id}"></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="mt-3 text-xs text-slate-300">
-      <div><strong>Attachments:</strong> ${ (loadout.attachments || []).join(', ') || '—' }</div>
-      <div class="mt-2 flex gap-2 flex-wrap" id="badges-${loadout.id}"></div>
-      <div class="mt-3 flex gap-2 items-center">
-        <div class="text-xs text-slate-300">Rate: </div>
-        <div id="stars-${loadout.id}" class="flex gap-1"></div>
-      </div>
-      <div class="mt-3">
-        <div class="text-xs text-slate-300"><strong>Pros:</strong> ${ (loadout.pros || []).join(', ') || '—' }</div>
-        <div class="text-xs text-slate-300 mt-1"><strong>Cons:</strong> ${ (loadout.cons || []).join(', ') || '—' }</div>
-        <div class="text-xs text-slate-300 mt-2"><strong>Tips:</strong> ${ loadout.tips || '—' }</div>
-      </div>
-    </div>
-
-    <div class="mt-3">
-      <div class="text-xs text-slate-300">Comments</div>
-      <div id="comments-${loadout.id}" class="mt-2"></div>
-      <div class="mt-2 flex gap-2">
-        <input id="comment-name-${loadout.id}" placeholder="Name" class="p-2 rounded bg-transparent border border-slate-700 text-xs w-28" />
-        <input id="comment-text-${loadout.id}" placeholder="Your comment" class="p-2 rounded bg-transparent border border-slate-700 text-xs flex-1" />
-        <button data-loadout="${loadout.id}" class="add-comment px-3 py-2 rounded bg-indigo-500 text-xs">Post</button>
-      </div>
-    </div>
-  `;
-
-  // badges attachments
-  const badgesEl = el.querySelector(`#badges-${loadout.id}`);
-  (loadout.attachments || []).forEach(a => {
-    const b = document.createElement('span');
-    b.className = "px-2 py-1 text-xs bg-slate-800 rounded";
-    b.textContent = a;
-    badgesEl.appendChild(b);
-  });
-
-  // stars
-  const starsEl = el.querySelector(`#stars-${loadout.id}`);
-  for (let s=1; s<=5; s++){
-    const star = document.createElement('span');
-    star.innerHTML = '★';
-    star.className = 'star text-slate-400';
-    star.dataset.value = s;
-    star.addEventListener('click', ()=> { addRating(loadout.id, s); updateRatingUI(loadout.id); });
-    starsEl.appendChild(star);
-  }
-  updateRatingUI(loadout.id);
-
-  // render comments
-  renderComments(loadout.id);
-
-  // add comment button
-  el.querySelector(".add-comment").addEventListener('click', (e)=> {
-    const id = e.currentTarget.dataset.loadout;
-    const name = document.getElementById(`comment-name-${id}`).value || "Guest";
-    const text = document.getElementById(`comment-text-${id}`).value || "";
-    if (!text.trim()) { alert("Write a short comment"); return; }
-    addComment(id, name, text);
-    document.getElementById(`comment-text-${id}`).value = "";
-    renderComments(id);
-  });
-
-  return el;
-}
-
-/* ratings stored in localStorage as array of numbers per loadout */
-function addRating(loadoutId, value) {
-  const key = LS_RATINGS_PREFIX + loadoutId;
-  let arr = JSON.parse(localStorage.getItem(key) || "[]");
-  // for demo: allow multiple ratings but we could restrict per-user by name later
-  arr.push(+value);
-  localStorage.setItem(key, JSON.stringify(arr));
-}
-
-/* compute avg rating and update UI */
-function updateRatingUI(loadoutId) {
-  const key = LS_RATINGS_PREFIX + loadoutId;
-  let arr = JSON.parse(localStorage.getItem(key) || "[]");
-  const avg = arr.length ? (arr.reduce((a,b)=>a+b,0)/arr.length) : 0;
-  const el = document.getElementById(`rating-${loadoutId}`);
-  el.innerHTML = `<div class="text-xs">⭐ ${avg ? avg.toFixed(2) : 'No ratings yet' } <span class="text-[11px] text-slate-400">(${arr.length})</span></div>`;
-}
-
-/* comments */
-function addComment(loadoutId, name, text) {
-  const key = LS_COMMENTS_PREFIX + loadoutId;
-  let arr = JSON.parse(localStorage.getItem(key) || "[]");
-  arr.unshift({ name, text, at: Date.now() });
-  localStorage.setItem(key, JSON.stringify(arr));
-}
-function renderComments(loadoutId) {
-  const key = LS_COMMENTS_PREFIX + loadoutId;
-  let arr = JSON.parse(localStorage.getItem(key) || "[]");
-  const el = document.getElementById(`comments-${loadoutId}`);
-  el.innerHTML = '';
-  if (!arr.length) {
-    el.innerHTML = '<div class="text-xs text-slate-400">No comments yet.</div>';
-    return;
-  }
-  for (const c of arr.slice(0,10)) {
-    const div = document.createElement('div');
-    div.className = "py-2 border-t border-slate-800 text-xs";
-    const time = new Date(c.at).toLocaleString();
-    div.innerHTML = `<div class="font-semibold text-sm">${escapeHtml(c.name)} <span class="text-xs text-slate-400 font-normal">• ${time}</span></div><div class="text-slate-300 mt-1">${escapeHtml(c.text)}</div>`;
-    el.appendChild(div);
-  }
-}
-
-/* safe text */
-function escapeHtml(s){ return String(s).replace(/[&<>"]/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' })[c]); }
-
-/* --- Submit form handling (save to localStorage) --- */
-document.getElementById('open-submit').addEventListener('click', ()=> {
-  document.getElementById('submitModal').classList.remove('hidden');
-  document.getElementById('submitModal').classList.add('flex');
-});
-document.getElementById('closeBackdrop').addEventListener('click', closeSubmitModal);
-document.getElementById('closeSubmit').addEventListener('click', closeSubmitModal);
-function closeSubmitModal(){ document.getElementById('submitModal').classList.add('hidden'); document.getElementById('submitModal').classList.remove('flex'); }
-
-document.getElementById('submitForm').addEventListener('submit', (ev)=> {
-  ev.preventDefault();
-  const loadout = {
-    id: 'custom_' + Math.random().toString(36).slice(2,9),
-    gunId: document.getElementById('submitGun').value,
-    mode: document.getElementById('submitMode').value,
-    purpose: document.getElementById('submitPurpose').value || 'Custom',
-    attachments: (document.getElementById('submitAtt').value || '').split(',').map(s=>s.trim()).filter(Boolean),
-    pros: (document.getElementById('submitPros').value || '').split(',').map(s=>s.trim()).filter(Boolean),
-    cons: (document.getElementById('submitCons').value || '').split(',').map(s=>s.trim()).filter(Boolean),
-    usedBy: document.getElementById('submitUsed').value || '',
-    tips: document.getElementById('submitTips').value || ''
-  };
-  const existing = loadCustomLoadouts();
-  existing.unshift(loadout);
-  saveCustomLoadouts(existing);
-  closeSubmitModal();
-  renderLoadouts();
-  alert('Loadout saved to your browser (demo). To make it public for everyone, connect to Firebase — see the comments in the code.');
+/* Populate select options */
+GUNS.forEach(g => {
+  gunSelect.innerHTML += `<option value="${g.id}">${g.name}</option>`;
+  submitGun.innerHTML += `<option value="${g.id}">${g.name}</option>`;
 });
 
-document.getElementById('previewBtn').addEventListener('click', ()=> {
-  const tmp = {
-    id: 'preview',
-    gunId: document.getElementById('submitGun').value,
-    mode: document.getElementById('submitMode').value,
-    purpose: document.getElementById('submitPurpose').value || 'Preview',
-    attachments: (document.getElementById('submitAtt').value || '').split(',').map(s=>s.trim()).filter(Boolean),
-    pros: (document.getElementById('submitPros').value || '').split(',').map(s=>s.trim()).filter(Boolean),
-    cons: (document.getElementById('submitCons').value || '').split(',').map(s=>s.trim()).filter(Boolean),
-    usedBy: document.getElementById('submitUsed').value || '',
-    tips: document.getElementById('submitTips').value || ''
-  };
-  // show preview in alert (simple) — open card directly
-  const container = document.createElement('div');
-  container.appendChild(createLoadoutCard(tmp));
-  const win = window.open('', '_blank', 'width=900,height=700');
-  win.document.write('<html><head><title>Preview</title></head><body style="background:#0b1220;color:#fff;font-family:Arial;padding:20px"></body></html>');
-  win.document.body.appendChild(container);
+/* Filter guns by search */
+gunSearch.addEventListener('input', () => {
+  const val = gunSearch.value.toLowerCase();
+  gunSelect.innerHTML = `<option value="">— Select weapon —</option>`;
+  GUNS.filter(g => g.name.toLowerCase().includes(val)).forEach(g => {
+    gunSelect.innerHTML += `<option value="${g.id}">${g.name}</option>`;
+  });
 });
-
-/* reset test data */
-document.getElementById('reset').addEventListener('click', ()=> {
-  if (!confirm('Clear demo saved loadouts, comments and ratings from this browser?')) return;
-  localStorage.removeItem(LS_CUSTOM_LOADOUTS);
-  // remove all comments & ratings keys
-  for (const k of Object.keys(localStorage)) {
-    if (k.startsWith(LS_COMMENTS_PREFIX) || k.startsWith(LS_RATINGS_PREFIX)) localStorage.removeItem(k);
-  }
-  alert('Demo data cleared for this browser.');
-  renderLoadouts();
-});
-
-/* initial render */
-renderLoadouts();
-
-/* helpful note for you (owner): How to add a new gun or loadout
-   - Edit the GUNS or SAMPLE_LOADOUTS arrays near the top of this file via GitHub web editor.
-   - Add more fields or change text — the UI will load them automatically.
-*/
-
-/* Optional next step (connect to Firebase)
-   - Create a Firebase project: https://console.firebase.google.com/
-   - Add a web app and copy the firebaseConfig object.
-   - Uncomment and integrate the Firebase SDK + small read/write functions to replace localStorage.
-   - If you'd like, I can create that Firebase example code for you and show exactly where to paste it in this file.
-*/
-
 </script>
 
 </body>
