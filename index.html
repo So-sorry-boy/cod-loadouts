@@ -4,23 +4,16 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>COD Loadouts Hub — Demo</title>
-
-  <!-- Tailwind via CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-
   <style>
-    /* Body background */
     body {
       background: radial-gradient(1200px 600px at 10% 10%, #071026 0%, #05060a 35%, #020203 100%);
     }
-
-    /* Glass card & hover effect */
     .glass { backdrop-filter: blur(6px); background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.04); }
     .card-hover:hover { transform: translateY(-6px) scale(1.01); transition: transform .25s ease; box-shadow: 0 10px 30px rgba(0,0,0,0.6); }
     .fade-in { animation: fadeIn .35s ease both; }
     @keyframes fadeIn { from {opacity:0; transform: translateY(6px)} to {opacity:1; transform:none} }
 
-    /* Select box */
     #gunSelect, #submitGun {
       text-align: center;
       text-align-last: center;
@@ -28,9 +21,9 @@
       color: black;
       border: 1px solid #d1d5db;
       border-radius: 8px;
-      padding: 16px; /* Increased from 8px to 16px for bigger size */
-      font-size: 1.25rem; /* Increased font size */
-      min-height: 3.5em; /* Make select box taller */
+      padding: 16px;
+      font-size: 1.25rem;
+      min-height: 3.5em;
     }
     #gunSelect option, #submitGun option {
       color: black;
@@ -38,33 +31,29 @@
       border-bottom: 1px solid #e5e7eb;
       font-size: 1rem;
     }
-    #gunSelect option:hover, #gunSelect option:checked, #gunSelect option:focus,
-    #submitGun option:hover, #submitGun option:checked, #submitGun option:focus {
-      background-color: #b8860b;
-      color: white;
-    }
     #gunSelect option:last-child, #submitGun option:last-child {
       border-bottom: none;
     }
 
-    /* Glitch-free animated search box */
+    /* Animated search box */
     .search-box {
-      font-size: 24px; /* Increased from 20px to 24px */
+      font-size: 24px;
       display: inline-block;
       position: relative;
       border-radius: 2.5em;
       width: 100%;
+      background: transparent;
     }
     .search-box-input {
       font-family: Raleway, sans-serif;
       font-weight: bold;
-      width: 3.5em; /* Increased from 2.5em to 3.5em */
-      height: 3.5em; /* Increased from 2.5em to 3.5em */
-      padding: 0.6em 2.5em 0.6em 0.8em; /* Increased padding */
+      width: 3.5em;
+      height: 3.5em;
+      padding: 0.6em 2.5em 0.6em 0.8em;
       border: none;
       box-sizing: border-box;
       border-radius: 2.5em;
-      transition: width 800ms cubic-bezier(0.68, -0.55, 0.27, 1.55);
+      transition: width 800ms cubic-bezier(0.68, -0.55, 0.27, 1.55), background 0.3s;
       background: rgba(255,255,255,0.05);
       color: #fff;
       font-size: 1.25rem;
@@ -73,6 +62,24 @@
       outline: none;
       width: 100%;
       background: rgba(255,255,255,0.08);
+    }
+    .search-box-label {
+      position: absolute;
+      left: 1em;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #cbd5e1;
+      pointer-events: none;
+      font-size: 1.15rem;
+      transition: all 0.3s cubic-bezier(.4,0,.2,1);
+      opacity: 1;
+    }
+    .search-box-input:focus + .search-box-label,
+    .search-box-input:not(:placeholder-shown) + .search-box-label {
+      top: 0.4em;
+      left: 1.2em;
+      font-size: 0.85em;
+      opacity: 0.8;
     }
     .search-box-reset {
       background-color: transparent;
@@ -88,9 +95,14 @@
       right: 0.55em;
       cursor: pointer;
       font-size: 1.25em;
+      color: #fff;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+    .search-box-reset:hover {
+      opacity: 1;
     }
   </style>
-  <link rel="stylesheet" href="search-box.css">
 </head>
 <body class="text-slate-100 min-h-screen antialiased">
 
@@ -104,7 +116,6 @@
       <p class="text-xs text-slate-300">Community loadouts — BR & Multiplayer (demo)</p>
     </div>
   </div>
-
   <div class="flex items-center gap-3">
     <button id="open-submit" class="px-4 py-2 rounded-md glass text-sm">Submit loadout</button>
     <button id="reset" title="Clear saved demo data" class="px-3 py-2 rounded-md bg-red-600/30 text-sm">Reset demo</button>
@@ -115,26 +126,23 @@
   <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
     <div class="glass p-4 rounded-xl col-span-1 md:col-span-3">
       <label class="text-xs text-slate-300">Pick weapon</label>
-
-      <!-- Search input -->
-      <form class="search-box mt-2">
-        <input type="text" placeholder=" " id="gunSearch" class="search-box-input"/>
-        <button type="reset" class="search-box-reset"></button>
+      <!-- Animated search input -->
+      <form class="search-box mt-2" autocomplete="off" onsubmit="return false;">
+        <input type="text" placeholder=" " id="gunSearch" class="search-box-input" autocomplete="off" />
+        <span class="search-box-label">Search weapon name...</span>
+        <button type="reset" class="search-box-reset" tabindex="-1" aria-label="Clear search" id="searchResetBtn">&times;</button>
       </form>
       <!-- Select -->
       <div class="mt-4">
         <select id="gunSelect" class="w-full rounded"></select>
       </div>
-
       <p id="gun-desc" class="mt-2 text-xs text-slate-400"></p>
     </div>
   </section>
-
   <section id="loadoutsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-5"></section>
   <div id="empty" class="mt-10 text-center text-slate-400">Select a weapon to see loadouts.</div>
 </main>
 
-<!-- Quick tips moved to the bottom -->
 <section class="max-w-6xl mx-auto px-6 mb-8">
   <div class="glass p-4 rounded-xl mt-6">
     <label class="text-xs text-slate-300">Quick tips</label>
@@ -148,7 +156,7 @@
   </div>
 </section>
 
-<!-- Submit modal -->
+<!-- Submit modal unchanged for brevity -->
 <div id="submitModal" class="fixed inset-0 z-40 hidden items-center justify-center p-4">
   <div class="absolute inset-0 bg-black/60" id="closeBackdrop"></div>
   <div class="relative w-full max-w-2xl glass rounded-xl p-5 z-50">
@@ -156,14 +164,12 @@
       <h3 class="text-lg font-semibold">Submit a new loadout (demo)</h3>
       <button id="closeSubmit" class="text-slate-300">✕</button>
     </div>
-
     <form id="submitForm" class="space-y-3 text-sm">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
         <label class="flex flex-col">
           <span class="text-xs text-slate-300">Weapon</span>
           <select id="submitGun" class="p-2 rounded bg-transparent border border-slate-700"></select>
         </label>
-
         <label class="flex flex-col">
           <span class="text-xs text-slate-300">Mode</span>
           <select id="submitMode" class="p-2 rounded bg-transparent border border-slate-700">
@@ -172,42 +178,34 @@
           </select>
         </label>
       </div>
-
       <label class="flex flex-col">
         <span class="text-xs text-slate-300">Purpose</span>
         <input id="submitPurpose" class="p-2 rounded bg-transparent border border-slate-700" />
       </label>
-
       <label class="flex flex-col">
         <span class="text-xs text-slate-300">Attachments (comma separated)</span>
         <input id="submitAtt" class="p-2 rounded bg-transparent border border-slate-700" />
       </label>
-
       <label class="flex flex-col">
         <span class="text-xs text-slate-300">Pros (comma separated)</span>
         <input id="submitPros" class="p-2 rounded bg-transparent border border-slate-700" />
       </label>
-
       <label class="flex flex-col">
         <span class="text-xs text-slate-300">Cons (comma separated)</span>
         <input id="submitCons" class="p-2 rounded bg-transparent border border-slate-700" />
       </label>
-
       <label class="flex flex-col">
         <span class="text-xs text-slate-300">Used by (optional)</span>
         <input id="submitUsed" class="p-2 rounded bg-transparent border border-slate-700" />
       </label>
-
       <label class="flex flex-col">
         <span class="text-xs text-slate-300">Tips (short)</span>
         <textarea id="submitTips" class="p-2 rounded bg-transparent border border-slate-700"></textarea>
       </label>
-
       <div class="flex items-center gap-3">
         <button type="submit" class="px-4 py-2 rounded-md bg-emerald-500">Submit</button>
         <button type="button" id="previewBtn" class="px-4 py-2 rounded-md glass">Preview</button>
       </div>
-
       <p class="text-xs text-slate-400">Demo saves new loadouts to your browser only. Connect Firebase later for public storage.</p>
     </form>
   </div>
@@ -269,26 +267,88 @@ const GUNS = [
   { id: "xpr50", name: "XPR-50" }
 ];
 
-
 const gunSelect = document.getElementById('gunSelect');
 const submitGun = document.getElementById('submitGun');
 const gunSearch = document.getElementById('gunSearch');
+const searchLabel = document.querySelector('.search-box-label');
+const searchResetBtn = document.getElementById('searchResetBtn');
 
 /* Populate select options */
-GUNS.forEach(g => {
-  gunSelect.innerHTML += `<option value="${g.id}">${g.name}</option>`;
-  submitGun.innerHTML += `<option value="${g.id}">${g.name}</option>`;
-});
-
-/* Filter guns by search */
-gunSearch.addEventListener('input', () => {
-  const val = gunSearch.value.toLowerCase();
+function populateGunSelect(filteredGuns, selectedId = "") {
   gunSelect.innerHTML = `<option value="">— Select weapon —</option>`;
-  GUNS.filter(g => g.name.toLowerCase().includes(val)).forEach(g => {
-    gunSelect.innerHTML += `<option value="${g.id}">${g.name}</option>`;
+  filteredGuns.forEach(g => {
+    gunSelect.innerHTML += `<option value="${g.id}"${g.id === selectedId ? ' selected' : ''}>${g.name}</option>`;
   });
-});
-</script>
+}
 
+function populateSubmitGunSelect() {
+  submitGun.innerHTML = `<option value="">— Select weapon —</option>`;
+  GUNS.forEach(g => {
+    submitGun.innerHTML += `<option value="${g.id}">${g.name}</option>`;
+  });
+}
+
+populateGunSelect(GUNS);
+populateSubmitGunSelect();
+
+/* Search & auto-select logic */
+gunSearch.addEventListener('input', () => {
+  const val = gunSearch.value.trim().toLowerCase();
+  if (!val) {
+    populateGunSelect(GUNS);
+    return;
+  }
+  // Prioritize guns that start with query, then others that include query (both alphabetically)
+  let startsWith = [];
+  let includes = [];
+  GUNS.forEach(g => {
+    const n = g.name.toLowerCase();
+    if (n.startsWith(val)) startsWith.push(g);
+    else if (n.includes(val)) includes.push(g);
+  });
+  startsWith.sort((a, b) => a.name.localeCompare(b.name));
+  includes.sort((a, b) => a.name.localeCompare(b.name));
+  const filtered = startsWith.concat(includes);
+
+  // If only one result, auto-select it
+  let selectedId = "";
+  if (filtered.length === 1) selectedId = filtered[0].id;
+  else if (filtered.length > 1 && startsWith.length === 1) selectedId = startsWith[0].id;
+
+  populateGunSelect(filtered, selectedId);
+
+  // Also set select box value
+  if (selectedId) {
+    gunSelect.value = selectedId;
+  } else {
+    gunSelect.value = "";
+  }
+});
+
+// If select box changes, update search box with name
+gunSelect.addEventListener('change', () => {
+  const selected = GUNS.find(g => g.id === gunSelect.value);
+  if (selected) {
+    gunSearch.value = selected.name;
+    gunSearch.dispatchEvent(new Event('input')); // Re-run filter for consistency
+  }
+});
+
+// Reset/cancel search
+searchResetBtn.addEventListener('click', () => {
+  gunSearch.value = "";
+  gunSearch.focus();
+  populateGunSelect(GUNS);
+});
+
+/* Animation for search box label (for browsers that don't support :placeholder-shown well) */
+gunSearch.addEventListener('focus', () => {
+  searchLabel.classList.add('active');
+});
+gunSearch.addEventListener('blur', () => {
+  if (!gunSearch.value) searchLabel.classList.remove('active');
+});
+
+</script>
 </body>
 </html>
